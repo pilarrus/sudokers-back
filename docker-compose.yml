@@ -1,0 +1,54 @@
+version: "3.5"
+
+networks:
+  api:
+  database:
+
+volumes:
+  mongodb:
+
+services:
+  nginx:
+    build:
+      context: ./docker/nginx
+      args:
+        APP_ENV: dev
+    depends_on:
+      - node
+    ports:
+      - 8080:80
+    networks:
+      - api
+
+  node:
+    build:
+      context: ./
+      dockerfile: ./docker/node/Dockerfile
+    working_dir: /app
+    depends_on:
+      - mongo
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    networks:
+      - api
+      - database
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=development
+    command: sh -c 'node ./bin/www'
+
+  mongo:
+    image: mongo:4.2-bionic
+    environment:
+      - MONGO_INITDB_DATABASE=sudokers
+      - MONGO_INITDB_ROOT_USERNAME=sudokers-root
+      - MONGO_INITDB_ROOT_PASSWORD=sudokers
+    volumes:
+      - ./docker/mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - mongodb:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - database
