@@ -1,17 +1,18 @@
 const createSudoku = (req, res) => {
-    res.send({status: 'OK', message: 'sudoku created'});
+  console.log('req.body', req.body);
+  return res.send({status: 'OK', message: 'sudoku created'});
 };
 
 const deleteSudoku = (req, res) => {
-    res.send({status: 'OK', message: 'sudoku deleted'});
+  return res.send({status: 'OK', message: 'sudoku deleted'});
 };
 
 const getSudokus = (req, res) => {
-    return res.json({success:true, module:'Sudokus'});
+  return res.json({success: true, module: 'Sudokus'});
 };
 
 const updateSudoku = (req, res) => {
-    res.send({status: 'OK', message: 'sudoku updated'});
+  return res.send({status: 'OK', message: 'sudoku updated'});
 };
 
-module.exports = { createSudoku, updateSudoku, deleteSudoku, getSudokus};
+module.exports = {createSudoku, updateSudoku, deleteSudoku, getSudokus};

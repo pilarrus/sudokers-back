@@ -12,7 +12,7 @@ app.use(logger('dev'));
 // parse application/json
 app.use(express.json());
 // parse application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
