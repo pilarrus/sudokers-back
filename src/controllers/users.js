@@ -9,7 +9,6 @@ const createUser = async (req, res) => {
 
     const hash = await bcrypt.hash(password, 15);
     // console.log('FIN', hash);
-
     await Users.create({
       username,
       password: hash,
@@ -23,8 +22,8 @@ const createUser = async (req, res) => {
       res.status(400).send({status: 'DUPLICATED_ VALUES', message: e.keyValue});
       return;
     }
-    console.log(e);
-    res.status(500).send({status: 'ERROR', message: e.message});
+    // console.log(e);
+    // res.status(500).send({status: 'ERROR', message: e.message});
   }
 };
 

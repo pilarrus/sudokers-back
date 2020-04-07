@@ -1,6 +1,24 @@
-const createSudoku = (req, res) => {
+const Sudokus = require('../mongo/models/sudokus')
+
+const createSudoku = async (req, res) => {
   console.log('req.body', req.body);
-  return res.send({status: 'OK', message: 'sudoku created'});
+
+  try {
+    const { cells, difficulty, seconds_accumulated, userId } = req.body;
+
+    const sudoku = await Sudokus.create({
+      cells,
+      difficulty,
+      seconds_accumulated,
+      user: userId
+    });
+
+    return res.send({status: 'OK', data: sudoku});
+
+  } catch (e) {
+    console.log('createSudoku: ', e);
+    res.status(500).send({status: 'ERROR', message: e.message});
+  }
 };
 
 const deleteSudoku = (req, res) => {
