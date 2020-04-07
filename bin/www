@@ -7,11 +7,14 @@
 var app = require('../src/app');
 var debug = require('debug')('sudokers-back:server');
 var http = require('http');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 /**
  * Get port from environment and store in Express.
  */
 
+dotenv.config();
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
@@ -22,12 +25,31 @@ app.set('port', port);
 var server = http.createServer(app);
 
 /**
+ * Connected to mongoDB
+ */
+
+console.log('MONGO', process.env.MONGO);
+
+mongoose
+  .connect(process.env.MONGO, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => {
+    console.log('Connected to mongoDB');
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+  })
+  .catch(e => console.log('mongodb error: ', e));
+
+/**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+// server.listen(port);
+// server.on('error', onError);
+// server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
