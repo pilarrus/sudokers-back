@@ -16,7 +16,7 @@ services:
     depends_on:
       - node
     ports:
-      - 8080:80
+      - 8082:80
     networks:
       - api
 
@@ -37,7 +37,7 @@ services:
       - 3000:3000
     environment:
       - NODE_ENV=development
-    command: sh -c 'node ./bin/www'
+    command: /bin/sh -c "echo 'Data Container' && while true; do sleep infinity; done"
 
   mongo:
     image: mongo:4.2-bionic

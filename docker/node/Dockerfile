@@ -4,7 +4,7 @@ COPY package*.json ./
 RUN npm install
 
 FROM node:12.16-alpine
-USER node
+#USER node
 WORKDIR /app
 COPY --from=builder node_modules node_modules
 COPY . .
