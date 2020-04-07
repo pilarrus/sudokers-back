@@ -7,6 +7,8 @@ router.post('/', sudokusController.createSudoku);
 
 router.get('/', sudokusController.getSudokus);
 
+router.get('/user/:userId', sudokusController.getSudokusByUser);
+
 router.patch('/', sudokusController.updateSudoku);
 
 router.delete('/', sudokusController.deleteSudoku);
