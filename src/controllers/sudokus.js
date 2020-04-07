@@ -1,8 +1,6 @@
 const Sudokus = require('../mongo/models/sudokus')
 
 const createSudoku = async (req, res) => {
-  console.log('req.body', req.body);
-
   try {
     const { cells, difficulty, seconds_accumulated, userId } = req.body;
 
@@ -13,10 +11,9 @@ const createSudoku = async (req, res) => {
       user: userId
     });
 
-    return res.send({status: 'OK', data: sudoku});
+    res.send({status: 'OK', data: sudoku});
 
   } catch (e) {
-    console.log('createSudoku: ', e);
     res.status(500).send({status: 'ERROR', message: e.message});
   }
 };
