@@ -1,28 +1,36 @@
 const jwt = require('jsonwebtoken');
 
-const isAuth = (req, res, next) => {
+const isAuthenticated = (req, res, next) => {
   try {
     const {token} = req.headers;
-
-    if (!token)
-      throw { code: 403, status: 'ACCESS_DENIED', message: 'Missing header token' };
+    if (!token) {
+      throw {code: 401, status: 'ACCESS_DENIED', message: 'Missing header token'};
+    }
 
     const data = jwt.verify(token, process.env.JWT_SECRET);
-
     req.sessionData = {userId: data.userId};
     next();
 
   } catch (e) {
-    res.status(e.code || 403).send({status: e.status || 'ERROR', message: e.message});
+    const httpCode = e.code || 403;
+    const httpStatus = e.status || 'ERROR';
+    res.status(httpCode).send({status: httpStatus, message: e.message});
   }
+};
+
+const isAuthorized = (req, res, next) => {
+  if (req.sessionData.userId !== req.params.id) {
+    return res.status(403).send({status: 'ACCESS_DENIED', message: 'Unauthorized user'});
+  }
+  next();
 };
 
 const isValidHostname = (req, res, next) => {
   const validHost = ['myHost', 'localhost'];
-  if (!validHost.includes(req.hostname))
+  if (!validHost.includes(req.hostname)) {
     return res.status(401).send({status: 'ACCESS_DENIED'});
-
+  }
   next();
 };
 
-module.exports = { isAuth, isValidHostname };
+module.exports = {isAuthenticated, isAuthorized, isValidHostname};

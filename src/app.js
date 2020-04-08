@@ -16,6 +16,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/sudokus', sudokusRouter);
-app.get('*', (req, res) => res.status(404).send('NOT FOUND'));
+
+// Route not found (404)
+app.use(function (req, res, next) {
+  return res.status(404).send({message: 'Route' + req.url + ' Not found.'});
+});
+// 500 - Any server error
+app.use(function (err, req, res, next) {
+  return res.status(500).send({error: err});
+});
 
 module.exports = app;
