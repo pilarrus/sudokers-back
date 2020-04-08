@@ -33,8 +33,22 @@ const getUsers = (req, res) => {
   return res.json({success: true, module: 'Usersss'});
 };
 
-const updateUser = (req, res) => {
-  return res.send({status: 'OK', message: 'user updated'});
+const updateUser = async (req, res) => {
+  try {
+    const { username, email, userId } = req.body;
+    await Users.findByIdAndUpdate(userId, {
+      username,
+      email
+    });
+    return res.send({status: 'OK', message: 'user updated'});
+
+  } catch (e) {
+    if(e.code && e.code === 11000) {
+      res.status(400).send({status: 'DUPLICATED_VALUES', message: e.keyValue});
+      return;
+    }
+    res.status(500).send({status: 'ERROR', message: 'user updated'});
+  }
 };
 
 module.exports = {createUser, deleteUser, getUsers, updateUser};
