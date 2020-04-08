@@ -6,19 +6,17 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await Users.findOne({ email });
-    if (user) {
-      const isOk = await bcrypt.compare(password, user.password);
-      if (isOk) {
-        const expiresIn = 60*10;
-        const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn});
-        res.send({status: 'OK', data: {token, expiresIn}});
-      } else {
-        res.status(401).send({status: 'INVALID_PASSWORD', message: ''});
-      }
+    if (!user)
+      return res.status(401).send({status: 'USER_NOT_FOUND', message: ''});
 
-    } else {
-      res.status(401).send({status: 'USER_NOT_FOUND', message: ''});
-    }
+    const isOk = await bcrypt.compare(password, user.password);
+    if(!isOk)
+      return res.status(401).send({status: 'INVALID_PASSWORD', message: ''});
+
+    const expiresIn = 60*10;
+    const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn});
+    res.send({status: 'OK', data: {token, expiresIn}});
+
   } catch (e) {
     res.status(500).send({status: 'ERROR', message: e.message});
   }
@@ -39,21 +37,19 @@ const createUser = async (req, res) => {
     res.send({status: 'OK', message: 'user created'});
 
   } catch (e) {
-    if(e.code && e.code === 11000) {
-      res.status(400).send({status: 'DUPLICATED_VALUES', message: e.keyValue});
-      return;
-    }
+    if(e.code && e.code === 11000)
+      return res.status(400).send({status: 'DUPLICATED_VALUES', message: e.keyValue});
 
     res.status(500).send({status: 'ERROR', message: e.message});
   }
 };
 
 const deleteUser = (req, res) => {
-  return res.send({status: 'OK', message: 'user deleted'});
+  res.send({status: 'OK', message: 'user deleted'});
 };
 
 const getUsers = (req, res) => {
-  return res.json({success: true, module: 'Usersss'});
+  res.json({success: true, module: 'Users'});
 };
 
 const updateUser = async (req, res) => {
@@ -66,10 +62,9 @@ const updateUser = async (req, res) => {
     return res.send({status: 'OK', message: 'user updated'});
 
   } catch (e) {
-    if(e.code && e.code === 11000) {
-      res.status(400).send({status: 'DUPLICATED_VALUES', message: e.keyValue});
-      return;
-    }
+    if(e.code && e.code === 11000)
+      return res.status(400).send({status: 'DUPLICATED_VALUES', message: e.keyValue});
+
     res.status(500).send({status: 'ERROR', message: 'user updated'});
   }
 };

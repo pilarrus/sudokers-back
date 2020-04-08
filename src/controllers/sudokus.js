@@ -1,4 +1,4 @@
-const Sudokus = require('../mongo/models/sudokus')
+const Sudokus = require('../mongo/models/sudokus');
 
 const createSudoku = async (req, res) => {
   try {
@@ -19,7 +19,7 @@ const createSudoku = async (req, res) => {
 };
 
 const deleteSudoku = (req, res) => {
-  return res.send({status: 'OK', message: 'sudoku deleted'});
+  res.send({status: 'OK', message: 'sudoku deleted'});
 };
 
 const getSudokus = async (req, res) => {
@@ -28,7 +28,6 @@ const getSudokus = async (req, res) => {
     res.send({status: 'OK', data: sudokus});
 
   } catch (e) {
-    console.log('getSudokus error: ', e);
     res.send({status: 'ERROR', message: e.message});
   }
 };
@@ -41,13 +40,12 @@ const getSudokusByUser = async (req, res) => {
     res.send({status: 'OK', data: sudokus});
 
   } catch (e) {
-    console.log('getSudokus error: ', e);
     res.send({status: 'ERROR', message: e.message});
   }
 };
 
 const updateSudoku = (req, res) => {
-  return res.send({status: 'OK', message: 'sudoku updated'});
+  res.send({status: 'OK', message: 'sudoku updated'});
 };
 
 module.exports = {createSudoku, deleteSudoku, getSudokus, getSudokusByUser, updateSudoku};

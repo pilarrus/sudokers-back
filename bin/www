@@ -10,11 +10,12 @@ var http = require('http');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
+dotenv.config();
+
 /**
  * Get port from environment and store in Express.
  */
 
-dotenv.config();
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
@@ -27,8 +28,6 @@ var server = http.createServer(app);
 /**
  * Connected to mongoDB
  */
-
-console.log('MONGO', process.env.MONGO);
 
 mongoose
   .connect(process.env.MONGO, {
