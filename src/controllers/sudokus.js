@@ -18,8 +18,17 @@ const createSudoku = async (req, res) => {
   }
 };
 
-const deleteSudoku = (req, res) => {
-  res.send({status: 'OK', message: 'sudoku deleted'});
+const deleteSudoku = async (req, res) => {
+  try {
+    console.log('req.params.sudokuId: ', req.params.sudokuId);
+    if(req.sessionData.userId !== req.body.userId) {
+      return res.status(403).send({status: 'ACCESS_DENIED', message: 'Unauthorized user'});
+    }
+    await Sudokus.findByIdAndDelete(req.params.sudokuId);
+    res.send({status: 'OK', message: 'sudoku deleted'});
+  } catch (e) {
+    res.status(500).send({status: 'ERROR', message: e.message});
+  }
 };
 
 const getSudokus = async (req, res) => {
