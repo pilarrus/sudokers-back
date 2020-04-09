@@ -19,6 +19,7 @@ const isAuthenticated = (req, res, next) => {
 };
 
 const isAuthorized = (req, res, next) => {
+  // También podría poner en el if un || rol !== 'admin'
   if (req.sessionData.userId !== req.params.id) {
     return res.status(403).send({status: 'ACCESS_DENIED', message: 'Unauthorized user'});
   }

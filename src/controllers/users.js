@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Users = require('../mongo/models/users');
+const Sudokus = require('../mongo/models/sudokus');
 
 const login = async (req, res) => {
   try {
@@ -46,9 +47,14 @@ const createUser = async (req, res) => {
   }
 };
 
-const deleteUser = (req, res) => {
-  console.log('req.params.id: ', req.params.id);
-  res.send({status: 'OK', message: 'user deleted'});
+const deleteUser = async (req, res) => {
+  try {
+    await Users.findByIdAndDelete(req.params.id);
+    await Sudokus.deleteMany({user: req.params.id});
+    res.send({status: 'OK', message: 'user deleted'});
+  } catch (e) {
+    res.status(500).send({status: 'ERROR', message: e.message});
+  }
 };
 
 const getUsers = (req, res) => {
@@ -58,7 +64,7 @@ const getUsers = (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { username, email } = req.body;
-    await Users.findByIdAndUpdate(req.sessionData.userId, {
+    await Users.findByIdAndUpdate(req.params.id, {
       username,
       email
     });
