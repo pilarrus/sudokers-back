@@ -6,7 +6,9 @@ const router = express.Router();
 
 router.post('/', usersController.createUser);
 
-router.get('/', usersController.getUsers);
+// router.get('/', usersController.getUsers);
+
+router.get('/isAvailable', usersController.isAvailable);
 
 router.patch('/:id', isValidHostname, isAuthenticated, isAuthorized, usersController.updateUser);
 

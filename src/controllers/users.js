@@ -57,8 +57,35 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const getUsers = (req, res) => {
-  res.json({success: true, module: 'Users'});
+// const getUsers = (req, res) => {
+//   res.json({success: true, module: 'Users'});
+// };
+
+const isAvailable = async (req, res) => {
+  try {
+    let user;
+
+    if(req.query.username && req.query.email) {
+      return res.status(400).send({status: 'ERROR', message: 'Only one parameter is allowed'});
+
+    } else if(req.query.username) {
+      user = await Users.findOne({username: req.query.username});
+
+    } else if (req.query.email) {
+      user = await Users.findOne({email: req.query.email});
+
+    } else {
+      return res.status(400).send({status: 'ERROR', message: 'Unsupported parameter'});
+    }
+
+    if(user) {
+      return res.status(200).send({status: 'OK', message: false});
+    }
+    return res.status(200).send({status: 'OK', message: true});
+
+  } catch (e) {
+    return res.status(500).send({status: 'ERROR', message: e.message});
+  }
 };
 
 const updateUser = async (req, res) => {
@@ -78,4 +105,11 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = {createUser, deleteUser, getUsers, updateUser, login};
+module.exports = {
+  createUser,
+  deleteUser,
+  // getUsers,
+  isAvailable,
+  login,
+  updateUser
+};
