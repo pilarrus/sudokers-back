@@ -2,7 +2,8 @@ const Sudokus = require('../mongo/models/sudokus');
 
 const createSudoku = async (req, res) => {
   try {
-    const { cells, difficulty, seconds_accumulated, userId } = req.body;
+    const userId = req.sessionData.userId;
+    const { cells, difficulty, seconds_accumulated } = req.body;
 
     const sudoku = await Sudokus.create({
       cells,

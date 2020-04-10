@@ -4,7 +4,7 @@ const sudokusController = require('../controllers/sudokus');
 
 const router = express.Router();
 
-router.post('/', sudokusController.createSudoku);
+router.post('/', isValidHostname, isAuthenticated, sudokusController.createSudoku);
 
 router.get('/', sudokusController.getSudokus);
 
