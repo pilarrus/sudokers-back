@@ -12,6 +12,6 @@ router.get('/:userId', isValidHostname, isAuthenticated, sudokusController.getSu
 
 router.patch('/:sudokuId', isValidHostname, isAuthenticated, isAuthorizedSudoku, sudokusController.updateSudoku);
 
-router.delete('/:sudokuId', isValidHostname, isAuthenticated, sudokusController.deleteSudoku);
+router.delete('/:sudokuId', isValidHostname, isAuthenticated, isAuthorizedSudoku, sudokusController.deleteSudoku);
 
 module.exports = router;
