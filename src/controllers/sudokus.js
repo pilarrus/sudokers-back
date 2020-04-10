@@ -32,15 +32,15 @@ const deleteSudoku = async (req, res) => {
   }
 };
 
-const getSudokus = async (req, res) => {
-  try {
-    const sudokus = await Sudokus.find();
-    res.send({status: 'OK', data: sudokus});
-
-  } catch (e) {
-    res.send({status: 'ERROR', message: e.message});
-  }
-};
+// const getSudokus = async (req, res) => {
+//   try {
+//     const sudokus = await Sudokus.find();
+//     res.send({status: 'OK', data: sudokus});
+//
+//   } catch (e) {
+//     res.send({status: 'ERROR', message: e.message});
+//   }
+// };
 
 const getSudokusByUser = async (req, res) => {
   try {
@@ -58,4 +58,10 @@ const updateSudoku = (req, res) => {
   res.send({status: 'OK', message: 'sudoku updated'});
 };
 
-module.exports = {createSudoku, deleteSudoku, getSudokus, getSudokusByUser, updateSudoku};
+module.exports = {
+  createSudoku,
+  deleteSudoku,
+  // getSudokus,
+  getSudokusByUser,
+  updateSudoku
+};

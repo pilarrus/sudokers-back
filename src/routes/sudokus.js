@@ -6,9 +6,9 @@ const router = express.Router();
 
 router.post('/', isValidHostname, isAuthenticated, sudokusController.createSudoku);
 
-router.get('/', sudokusController.getSudokus);
+// router.get('/', sudokusController.getSudokus);
 
-router.get('/user/:userId', sudokusController.getSudokusByUser);
+router.get('/:userId', isValidHostname, isAuthenticated, sudokusController.getSudokusByUser);
 
 router.patch('/', sudokusController.updateSudoku);
 
