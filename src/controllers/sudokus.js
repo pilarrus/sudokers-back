@@ -54,8 +54,21 @@ const getSudokusByUser = async (req, res) => {
   }
 };
 
-const updateSudoku = (req, res) => {
-  res.send({status: 'OK', message: 'sudoku updated'});
+const updateSudoku = async (req, res) => {
+  try {
+    const { cells, seconds_accumulated } = req.body;
+    if(!cells || !seconds_accumulated) {
+      return res.status(400).send({status: 'ERROR', message: 'cells and seconds_accumulated cannot be null'});
+    }
+    await Sudokus.findByIdAndUpdate(req.params.sudokuId, {
+      cells, seconds_accumulated
+    });
+    res.send({status: 'OK', message: 'sudoku updated'});
+
+  } catch (e) {
+    console.log('e: ', e);
+    res.status(500).send({status: 'ERROR', message: 'sudoku updated'});
+  }
 };
 
 module.exports = {
