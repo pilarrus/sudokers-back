@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const Sudokus = require('../mongo/models/sudokus');
 
 const isAuthenticated = (req, res, next) => {
   try {
@@ -26,6 +27,19 @@ const isAuthorized = (req, res, next) => {
   next();
 };
 
+const isAuthorizedSudoku = async (req, res, next) => {
+  try {
+    const sudokus = await Sudokus.find({user: req.sessionData.userId});
+    const matchSudoku = sudokus.filter( sudoku => sudoku._id.toString() === req.params.sudokuId );
+    if(!matchSudoku.length) {
+      return res.status(403).send({status: 'ACCESS_DENIED', message: 'Unauthorized user'});
+    }
+    next();
+  } catch (e) {
+    return res.status(403).send({status: 'ACCESS_DENIED', message: 'Unauthorized user'});
+  }
+};
+
 const isValidHostname = (req, res, next) => {
   const validHost = ['myHost', 'localhost'];
   if (!validHost.includes(req.hostname)) {
@@ -34,4 +48,4 @@ const isValidHostname = (req, res, next) => {
   next();
 };
 
-module.exports = {isAuthenticated, isAuthorized, isValidHostname};
+module.exports = {isAuthenticated, isAuthorized, isAuthorizedSudoku, isValidHostname};
