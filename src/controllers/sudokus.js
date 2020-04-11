@@ -37,6 +37,15 @@ const deleteSudoku = async (req, res) => {
 //   }
 // };
 
+const getSudoku = async (req, res) => {
+  try {
+    const sudoku = await Sudokus.findById(req.params.sudokuId);
+    res.send({ status: 'OK', message: sudoku });
+  } catch (e) {
+    res.send({ status: 'ERROR', message: e.message });
+  }
+};
+
 const getSudokusByUser = async (req, res) => {
   try {
     const sudokus = await Sudokus.find({
@@ -52,12 +61,10 @@ const updateSudoku = async (req, res) => {
   try {
     const { cells, seconds_accumulated } = req.body;
     if (!cells || !seconds_accumulated) {
-      return res
-        .status(400)
-        .send({
-          status: 'ERROR',
-          message: 'cells and seconds_accumulated cannot be null',
-        });
+      return res.status(400).send({
+        status: 'ERROR',
+        message: 'cells and seconds_accumulated cannot be null',
+      });
     }
     await Sudokus.findByIdAndUpdate(req.params.sudokuId, {
       cells,
@@ -72,6 +79,7 @@ const updateSudoku = async (req, res) => {
 module.exports = {
   createSudoku,
   deleteSudoku,
+  getSudoku,
   // getSudokus,
   getSudokusByUser,
   updateSudoku,

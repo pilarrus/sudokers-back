@@ -15,10 +15,12 @@ router.post(
   sudokusController.createSudoku
 );
 
+router.get('/:sudokuId', sudokusController.getSudoku);
+
 // router.get('/', sudokusController.getSudokus);
 
 router.get(
-  '/:userId',
+  '/user/:userId',
   isValidHostname,
   isAuthenticated,
   sudokusController.getSudokusByUser
