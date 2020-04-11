@@ -2,29 +2,28 @@ const Sudokus = require('../mongo/models/sudokus');
 
 const createSudoku = async (req, res) => {
   try {
-    const userId = req.sessionData.userId;
+    const { userId } = req.sessionData;
     const { cells, difficulty, seconds_accumulated } = req.body;
 
     const sudoku = await Sudokus.create({
       cells,
       difficulty,
       seconds_accumulated,
-      user: userId
+      user: userId,
     });
 
-    res.send({status: 'OK', data: sudoku});
-
+    res.send({ status: 'OK', data: sudoku });
   } catch (e) {
-    res.status(500).send({status: 'ERROR', message: e.message});
+    res.status(500).send({ status: 'ERROR', message: e.message });
   }
 };
 
 const deleteSudoku = async (req, res) => {
   try {
     await Sudokus.findByIdAndDelete(req.params.sudokuId);
-    res.send({status: 'OK', message: 'sudoku deleted'});
+    res.send({ status: 'OK', message: 'sudoku deleted' });
   } catch (e) {
-    res.status(500).send({status: 'ERROR', message: e.message});
+    res.status(500).send({ status: 'ERROR', message: e.message });
   }
 };
 
@@ -41,29 +40,32 @@ const deleteSudoku = async (req, res) => {
 const getSudokusByUser = async (req, res) => {
   try {
     const sudokus = await Sudokus.find({
-      user: req.params.userId
+      user: req.params.userId,
     });
-    res.send({status: 'OK', data: sudokus});
-
+    res.send({ status: 'OK', data: sudokus });
   } catch (e) {
-    res.send({status: 'ERROR', message: e.message});
+    res.send({ status: 'ERROR', message: e.message });
   }
 };
 
 const updateSudoku = async (req, res) => {
   try {
     const { cells, seconds_accumulated } = req.body;
-    if(!cells || !seconds_accumulated) {
-      return res.status(400).send({status: 'ERROR', message: 'cells and seconds_accumulated cannot be null'});
+    if (!cells || !seconds_accumulated) {
+      return res
+        .status(400)
+        .send({
+          status: 'ERROR',
+          message: 'cells and seconds_accumulated cannot be null',
+        });
     }
     await Sudokus.findByIdAndUpdate(req.params.sudokuId, {
-      cells, seconds_accumulated
+      cells,
+      seconds_accumulated,
     });
-    res.send({status: 'OK', message: 'sudoku updated'});
-
+    return res.send({ status: 'OK', message: 'sudoku updated' });
   } catch (e) {
-    console.log('e: ', e);
-    res.status(500).send({status: 'ERROR', message: 'sudoku updated'});
+    return res.status(500).send({ status: 'ERROR', message: 'sudoku updated' });
   }
 };
 
@@ -72,5 +74,5 @@ module.exports = {
   deleteSudoku,
   // getSudokus,
   getSudokusByUser,
-  updateSudoku
+  updateSudoku,
 };

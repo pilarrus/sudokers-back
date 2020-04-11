@@ -1,17 +1,43 @@
 const express = require('express');
-const { isAuthenticated, isAuthorizedSudoku, isValidHostname } = require('../middlewares/auth');
+const {
+  isAuthenticated,
+  isAuthorizedSudoku,
+  isValidHostname,
+} = require('../middlewares/auth');
 const sudokusController = require('../controllers/sudokus');
 
 const router = express.Router();
 
-router.post('/', isValidHostname, isAuthenticated, sudokusController.createSudoku);
+router.post(
+  '/',
+  isValidHostname,
+  isAuthenticated,
+  sudokusController.createSudoku
+);
 
 // router.get('/', sudokusController.getSudokus);
 
-router.get('/:userId', isValidHostname, isAuthenticated, sudokusController.getSudokusByUser);
+router.get(
+  '/:userId',
+  isValidHostname,
+  isAuthenticated,
+  sudokusController.getSudokusByUser
+);
 
-router.patch('/:sudokuId', isValidHostname, isAuthenticated, isAuthorizedSudoku, sudokusController.updateSudoku);
+router.patch(
+  '/:sudokuId',
+  isValidHostname,
+  isAuthenticated,
+  isAuthorizedSudoku,
+  sudokusController.updateSudoku
+);
 
-router.delete('/:sudokuId', isValidHostname, isAuthenticated, isAuthorizedSudoku, sudokusController.deleteSudoku);
+router.delete(
+  '/:sudokuId',
+  isValidHostname,
+  isAuthenticated,
+  isAuthorizedSudoku,
+  sudokusController.deleteSudoku
+);
 
 module.exports = router;

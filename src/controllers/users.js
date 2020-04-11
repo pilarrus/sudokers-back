@@ -8,20 +8,21 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await Users.findOne({ email });
     if (!user) {
-      return res.status(401).send({status: 'USER_NOT_FOUND', message: ''});
+      return res.status(401).send({ status: 'USER_NOT_FOUND', message: '' });
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if(!isPasswordMatch) {
-      return res.status(401).send({status: 'INVALID_PASSWORD', message: ''});
+    if (!isPasswordMatch) {
+      return res.status(401).send({ status: 'INVALID_PASSWORD', message: '' });
     }
 
-    const expiresIn = 60*10;
-    const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn});
-    res.send({status: 'OK', data: {token, expiresIn}});
-
+    const expiresIn = 60 * 10;
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn,
+    });
+    return res.send({ status: 'OK', data: { token, expiresIn } });
   } catch (e) {
-    res.status(500).send({status: 'ERROR', message: e.message});
+    return res.status(500).send({ status: 'ERROR', message: e.message });
   }
 };
 
@@ -34,26 +35,27 @@ const createUser = async (req, res) => {
     await Users.create({
       username,
       password: hash,
-      email
+      email,
     });
 
-    res.send({status: 'OK', message: 'user created'});
-
+    return res.send({ status: 'OK', message: 'user created' });
   } catch (e) {
-    if(e.code && e.code === 11000) {
-      return res.status(400).send({status: 'DUPLICATED_VALUES', message: e.keyValue});
+    if (e.code && e.code === 11000) {
+      return res
+        .status(400)
+        .send({ status: 'DUPLICATED_VALUES', message: e.keyValue });
     }
-    res.status(500).send({status: 'ERROR', message: e.message});
+    return res.status(500).send({ status: 'ERROR', message: e.message });
   }
 };
 
 const deleteUser = async (req, res) => {
   try {
     await Users.findByIdAndDelete(req.params.id);
-    await Sudokus.deleteMany({user: req.params.id});
-    res.send({status: 'OK', message: 'user deleted'});
+    await Sudokus.deleteMany({ user: req.params.id });
+    return res.send({ status: 'OK', message: 'user deleted' });
   } catch (e) {
-    res.status(500).send({status: 'ERROR', message: e.message});
+    return res.status(500).send({ status: 'ERROR', message: e.message });
   }
 };
 
@@ -65,26 +67,27 @@ const isAvailable = async (req, res) => {
   try {
     let user;
 
-    if(req.query.username && req.query.email) {
-      return res.status(400).send({status: 'ERROR', message: 'Only one parameter is allowed'});
-
-    } else if(req.query.username) {
-      user = await Users.findOne({username: req.query.username});
-
+    if (req.query.username && req.query.email) {
+      return res
+        .status(400)
+        .send({ status: 'ERROR', message: 'Only one parameter is allowed' });
+    }
+    if (req.query.username) {
+      user = await Users.findOne({ username: req.query.username });
     } else if (req.query.email) {
-      user = await Users.findOne({email: req.query.email});
-
+      user = await Users.findOne({ email: req.query.email });
     } else {
-      return res.status(400).send({status: 'ERROR', message: 'Unsupported parameter'});
+      return res
+        .status(400)
+        .send({ status: 'ERROR', message: 'Unsupported parameter' });
     }
 
-    if(user) {
-      return res.status(200).send({status: 'OK', message: false});
+    if (user) {
+      return res.status(200).send({ status: 'OK', message: false });
     }
-    return res.status(200).send({status: 'OK', message: true});
-
+    return res.status(200).send({ status: 'OK', message: true });
   } catch (e) {
-    return res.status(500).send({status: 'ERROR', message: e.message});
+    return res.status(500).send({ status: 'ERROR', message: e.message });
   }
 };
 
@@ -93,15 +96,16 @@ const updateUser = async (req, res) => {
     const { username, email } = req.body;
     await Users.findByIdAndUpdate(req.params.id, {
       username,
-      email
+      email,
     });
-    return res.send({status: 'OK', message: 'user updated'});
-
+    return res.send({ status: 'OK', message: 'user updated' });
   } catch (e) {
-    if(e.code && e.code === 11000) {
-      return res.status(400).send({status: 'DUPLICATED_VALUES', message: e.keyValue});
+    if (e.code && e.code === 11000) {
+      return res
+        .status(400)
+        .send({ status: 'DUPLICATED_VALUES', message: e.keyValue });
     }
-    res.status(500).send({status: 'ERROR', message: 'user updated'});
+    return res.status(500).send({ status: 'ERROR', message: 'user updated' });
   }
 };
 
@@ -111,5 +115,5 @@ module.exports = {
   // getUsers,
   isAvailable,
   login,
-  updateUser
+  updateUser,
 };
