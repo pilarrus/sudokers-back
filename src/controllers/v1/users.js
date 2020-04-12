@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
-const Users = require('../mongo/models/users');
-const Sudokus = require('../mongo/models/sudokus');
-const { generateKeyPairs } = require('../utils/helpers-functions');
+const Users = require('../../mongo/models/users');
+const Sudokus = require('../../mongo/models/sudokus');
+const { generateKeyPairs } = require('../../utils/helpers-functions');
 
 const createUser = async (req, res) => {
   try {

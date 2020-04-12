@@ -3,8 +3,8 @@ const {
   isAuthenticated,
   isAuthorizedSudoku,
   isValidHostname,
-} = require('../middlewares/auth');
-const sudokusController = require('../controllers/sudokus');
+} = require('../../middlewares/auth');
+const sudokusController = require('../../controllers/v1/sudokus');
 
 const router = express.Router();
 

@@ -3,8 +3,8 @@ const {
   isAuthenticated,
   isAuthorized,
   isValidHostname,
-} = require('../middlewares/auth');
-const usersController = require('../controllers/users');
+} = require('../../middlewares/auth');
+const usersController = require('../../controllers/v1/users');
 
 const router = express.Router();
 

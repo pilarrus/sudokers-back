@@ -1,4 +1,4 @@
-const Sudokus = require('../mongo/models/sudokus');
+const Sudokus = require('../../mongo/models/sudokus');
 
 const createSudoku = async (req, res) => {
   try {
