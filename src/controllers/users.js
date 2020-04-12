@@ -1,30 +1,7 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const Users = require('../mongo/models/users');
 const Sudokus = require('../mongo/models/sudokus');
-
-const login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await Users.findOne({ email });
-    if (!user) {
-      return res.status(401).send({ status: 'USER_NOT_FOUND', message: '' });
-    }
-
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch) {
-      return res.status(401).send({ status: 'INVALID_PASSWORD', message: '' });
-    }
-
-    const expiresIn = 60 * 10;
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn,
-    });
-    return res.send({ status: 'OK', data: { token, expiresIn } });
-  } catch (e) {
-    return res.status(500).send({ status: 'ERROR', message: e.message });
-  }
-};
+const { generateKeyPairs } = require('../utils/helpers-functions');
 
 const createUser = async (req, res) => {
   try {
@@ -91,6 +68,26 @@ const isAvailable = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await Users.findOne({ email });
+    if (!user) {
+      return res.status(401).send({ status: 'USER_NOT_FOUND', message: '' });
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
+      return res.status(401).send({ status: 'INVALID_PASSWORD', message: '' });
+    }
+
+    const { token, refreshToken } = await generateKeyPairs(user);
+    return res.send({ status: 'OK', data: { token, refreshToken } });
+  } catch (e) {
+    return res.status(500).send({ status: 'ERROR', message: e.message });
+  }
+};
+
 const updateUser = async (req, res) => {
   try {
     const { username, email } = req.body;
@@ -109,6 +106,22 @@ const updateUser = async (req, res) => {
   }
 };
 
+const refreshLogin = async (req, res) => {
+  try {
+    const { userId, refresh } = req.body;
+    const user = await Users.findById(userId);
+    const userRefreshToken = user.refresh_token;
+    if (userRefreshToken !== refresh) {
+      return res.status(401).send({ status: 'INVALID_REFRESH_TOKEN', message: '' });
+    }
+
+    const { token, refreshToken } = await generateKeyPairs(user);
+    return res.send({ status: 'OK', data: { token, refreshToken } });
+  } catch (e) {
+    return res.status(500).send({ status: 'ERROR', message: e.message });
+  }
+};
+
 module.exports = {
   createUser,
   deleteUser,
@@ -116,4 +129,5 @@ module.exports = {
   isAvailable,
   login,
   updateUser,
+  refreshLogin,
 };

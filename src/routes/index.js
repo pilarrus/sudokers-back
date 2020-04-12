@@ -8,4 +8,6 @@ router.get('/', (req, res) => res.json({ success: true, message: 'Home' }));
 
 router.post('/login', usersController.login);
 
+router.post('/refreshLogin', usersController.refreshLogin);
+
 module.exports = router;
