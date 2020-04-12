@@ -15,14 +15,14 @@ const createUser = async (req, res) => {
       email,
     });
 
-    return res.send({ status: 'OK', message: 'user created' });
+    return res.json({ status: 'OK', message: 'user created' });
   } catch (e) {
     if (e.code && e.code === 11000) {
       return res
         .status(400)
-        .send({ status: 'DUPLICATED_VALUES', message: e.keyValue });
+        .json({ status: 'DUPLICATED_VALUES', message: e.keyValue });
     }
-    return res.status(500).send({ status: 'ERROR', message: e.message });
+    return res.status(500).json({ status: 'ERROR', message: e.message });
   }
 };
 
@@ -30,9 +30,9 @@ const deleteUser = async (req, res) => {
   try {
     await Users.findByIdAndDelete(req.params.id);
     await Sudokus.deleteMany({ user: req.params.id });
-    return res.send({ status: 'OK', message: 'user deleted' });
+    return res.json({ status: 'OK', message: 'user deleted' });
   } catch (e) {
-    return res.status(500).send({ status: 'ERROR', message: e.message });
+    return res.status(500).json({ status: 'ERROR', message: e.message });
   }
 };
 
@@ -47,7 +47,7 @@ const isAvailable = async (req, res) => {
     if (req.query.username && req.query.email) {
       return res
         .status(400)
-        .send({ status: 'ERROR', message: 'Only one parameter is allowed' });
+        .json({ status: 'ERROR', message: 'Only one parameter is allowed' });
     }
     if (req.query.username) {
       user = await Users.findOne({ username: req.query.username });
@@ -56,15 +56,15 @@ const isAvailable = async (req, res) => {
     } else {
       return res
         .status(400)
-        .send({ status: 'ERROR', message: 'Unsupported parameter' });
+        .json({ status: 'ERROR', message: 'Unsupported parameter' });
     }
 
     if (user) {
-      return res.status(200).send({ status: 'OK', message: false });
+      return res.status(200).json({ status: 'OK', message: false });
     }
-    return res.status(200).send({ status: 'OK', message: true });
+    return res.status(200).json({ status: 'OK', message: true });
   } catch (e) {
-    return res.status(500).send({ status: 'ERROR', message: e.message });
+    return res.status(500).json({ status: 'ERROR', message: e.message });
   }
 };
 
@@ -73,18 +73,18 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await Users.findOne({ email });
     if (!user) {
-      return res.status(401).send({ status: 'INVALID_EMAIL_AND/OR_PASSWORD', message: '' });
+      return res.status(401).json({ status: 'INVALID_EMAIL_AND/OR_PASSWORD', message: '' });
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-      return res.status(401).send({ status: 'INVALID_EMAIL_AND/OR_PASSWORD', message: '' });
+      return res.status(401).json({ status: 'INVALID_EMAIL_AND/OR_PASSWORD', message: '' });
     }
 
     const { token, refreshToken } = await generateKeyPairs(user);
-    return res.send({ status: 'OK', data: { token, refreshToken } });
+    return res.json({ status: 'OK', data: { token, refreshToken } });
   } catch (e) {
-    return res.status(500).send({ status: 'ERROR', message: e.message });
+    return res.status(500).json({ status: 'ERROR', message: e.message });
   }
 };
 
@@ -96,14 +96,14 @@ const updateUser = async (req, res) => {
       password,
       email
     });
-    return res.send({ status: 'OK', message: 'user updated' });
+    return res.json({ status: 'OK', message: 'user updated' });
   } catch (e) {
     if (e.code && e.code === 11000) {
       return res
         .status(400)
         .send({ status: 'DUPLICATED_VALUES', message: e.keyValue });
     }
-    return res.status(500).send({ status: 'ERROR', message: 'user updated' });
+    return res.status(500).json({ status: 'ERROR', message: 'user updated' });
   }
 };
 
@@ -113,13 +113,13 @@ const refreshLogin = async (req, res) => {
     const user = await Users.findById(userId);
     const userRefreshToken = user.refresh_token;
     if (userRefreshToken !== refresh) {
-      return res.status(401).send({ status: 'INVALID_REFRESH_TOKEN', message: '' });
+      return res.status(401).json({ status: 'INVALID_REFRESH_TOKEN', message: '' });
     }
 
     const { token, refreshToken } = await generateKeyPairs(user);
-    return res.send({ status: 'OK', data: { token, refreshToken } });
+    return res.json({ status: 'OK', data: { token, refreshToken } });
   } catch (e) {
-    return res.status(500).send({ status: 'ERROR', message: e.message });
+    return res.status(500).json({ status: 'ERROR', message: e.message });
   }
 };
 

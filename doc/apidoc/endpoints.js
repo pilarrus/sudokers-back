@@ -407,7 +407,7 @@
  * @api {get} /sudokus/user/:userId Obtiene sudokus
  * @apiDescription Obtiene los sudokus de un usuario
  *
- * @apiName getSudokuByUser
+ * @apiName getSudokusByUser
  * @apiGroup Sudokus
  * @apiUse sendAuth
  *

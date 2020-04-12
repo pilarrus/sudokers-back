@@ -12,18 +12,18 @@ const createSudoku = async (req, res) => {
       user: userId,
     });
 
-    res.send({ status: 'OK', data: sudoku });
+    return res.json({ status: 'OK', data: sudoku });
   } catch (e) {
-    res.status(500).send({ status: 'ERROR', message: e.message });
+    return res.status(500).json({ status: 'ERROR', message: e.message });
   }
 };
 
 const deleteSudoku = async (req, res) => {
   try {
     await Sudokus.findByIdAndDelete(req.params.sudokuId);
-    res.send({ status: 'OK', message: 'sudoku deleted' });
+    return res.json({ status: 'OK', message: 'sudoku deleted' });
   } catch (e) {
-    res.status(500).send({ status: 'ERROR', message: e.message });
+    return res.status(500).json({ status: 'ERROR', message: e.message });
   }
 };
 
@@ -40,9 +40,9 @@ const deleteSudoku = async (req, res) => {
 const getSudoku = async (req, res) => {
   try {
     const sudoku = await Sudokus.findById(req.params.sudokuId);
-    res.send({ status: 'OK', message: sudoku });
+    return res.json({ status: 'OK', message: sudoku });
   } catch (e) {
-    res.send({ status: 'ERROR', message: e.message });
+    return res.json({ status: 'ERROR', message: e.message });
   }
 };
 
@@ -51,9 +51,9 @@ const getSudokusByUser = async (req, res) => {
     const sudokus = await Sudokus.find({
       user: req.params.userId,
     });
-    res.send({ status: 'OK', data: sudokus });
+    return res.json({ status: 'OK', data: sudokus });
   } catch (e) {
-    res.send({ status: 'ERROR', message: e.message });
+    return res.json({ status: 'ERROR', message: e.message });
   }
 };
 
@@ -61,7 +61,7 @@ const updateSudoku = async (req, res) => {
   try {
     const { cells, seconds_accumulated } = req.body;
     if (!cells || !seconds_accumulated) {
-      return res.status(400).send({
+      return res.status(400).json({
         status: 'ERROR',
         message: 'cells and seconds_accumulated cannot be null',
       });
@@ -70,9 +70,9 @@ const updateSudoku = async (req, res) => {
       cells,
       seconds_accumulated,
     });
-    return res.send({ status: 'OK', message: 'sudoku updated' });
+    return res.json({ status: 'OK', message: 'sudoku updated' });
   } catch (e) {
-    return res.status(500).send({ status: 'ERROR', message: 'sudoku updated' });
+    return res.status(500).json({ status: 'ERROR', message: 'sudoku updated' });
   }
 };
 

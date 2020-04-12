@@ -352,7 +352,7 @@ define({ "api": [
     "url": "/sudokus/user/:userId",
     "title": "Obtiene sudokus",
     "description": "<p>Obtiene los sudokus de un usuario</p>",
-    "name": "getSudokuByUser",
+    "name": "getSudokusByUser",
     "group": "Sudokus",
     "success": {
       "fields": {

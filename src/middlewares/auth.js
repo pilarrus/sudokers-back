@@ -19,7 +19,7 @@ const isAuthenticated = (req, res, next) => {
   } catch (e) {
     const httpCode = e.code || 403;
     const httpStatus = e.status || 'ERROR';
-    res.status(httpCode).send({ status: httpStatus, message: e.message });
+    res.status(httpCode).json({ status: httpStatus, message: e.message });
   }
 };
 
@@ -29,7 +29,7 @@ const isAuthorized = (req, res, next) => {
   if (req.sessionData.userId !== req.params.id) {
     return res
       .status(403)
-      .send({ status: 'ACCESS_DENIED', message: 'Unauthorized user' });
+      .json({ status: 'ACCESS_DENIED', message: 'Unauthorized user' });
   }
   next();
 };
@@ -44,13 +44,13 @@ const isAuthorizedSudoku = async (req, res, next) => {
     if (!matchSudoku.length) {
       return res
         .status(403)
-        .send({ status: 'ACCESS_DENIED', message: 'Unauthorized user' });
+        .json({ status: 'ACCESS_DENIED', message: 'Unauthorized user' });
     }
     next();
   } catch (e) {
     return res
       .status(403)
-      .send({ status: 'ACCESS_DENIED', message: 'Unauthorized user' });
+      .json({ status: 'ACCESS_DENIED', message: 'Unauthorized user' });
   }
 };
 
@@ -58,7 +58,7 @@ const isAuthorizedSudoku = async (req, res, next) => {
 const isValidHostname = (req, res, next) => {
   const validHost = ['myHost', 'localhost'];
   if (!validHost.includes(req.hostname)) {
-    return res.status(401).send({ status: 'ACCESS_DENIED' });
+    return res.status(401).json({ status: 'ACCESS_DENIED' });
   }
   next();
 };
