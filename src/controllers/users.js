@@ -73,12 +73,12 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await Users.findOne({ email });
     if (!user) {
-      return res.status(401).send({ status: 'USER_NOT_FOUND', message: '' });
+      return res.status(401).send({ status: 'INVALID_EMAIL_AND/OR_PASSWORD', message: '' });
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-      return res.status(401).send({ status: 'INVALID_PASSWORD', message: '' });
+      return res.status(401).send({ status: 'INVALID_EMAIL_AND/OR_PASSWORD', message: '' });
     }
 
     const { token, refreshToken } = await generateKeyPairs(user);
@@ -90,10 +90,11 @@ const login = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { username, email } = req.body;
+    const { username, password, email } = req.body;
     await Users.findByIdAndUpdate(req.params.id, {
       username,
-      email,
+      password,
+      email
     });
     return res.send({ status: 'OK', message: 'user updated' });
   } catch (e) {

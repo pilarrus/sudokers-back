@@ -21,5 +21,12 @@
     "eslint-plugin-import": "^2.20.2",
     "nodemon": "^1.19.4",
     "prettier": "^2.0.4"
+  },
+  "apidoc": {
+    "name": "Sudokers Back",
+    "version": "0.0.0",
+    "description": "Backend del proyecto Sudokers",
+    "title": "Sudokers Back Doc",
+    "url": "https://api.github.com/v1"
   }
 }
