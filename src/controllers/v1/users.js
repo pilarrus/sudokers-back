@@ -15,7 +15,9 @@ const createUser = async (req, res) => {
       email,
     });
 
-    return res.status(201).json({ status: 'OK', message: user });
+    const userId = user._id;
+    const { token, refreshToken } = await generateKeyPairs(user);
+    return res.status(201).json({ status: 'OK', message: { userId, token, refreshToken } });
   } catch (e) {
     if (e.code && e.code === 11000) {
       return res
@@ -81,8 +83,9 @@ const login = async (req, res) => {
       return res.status(401).json({ status: 'INVALID_EMAIL_AND/OR_PASSWORD', message: '' });
     }
 
+    const userId = user._id;
     const { token, refreshToken } = await generateKeyPairs(user);
-    return res.json({ status: 'OK', data: { token, refreshToken } });
+    return res.json({ status: 'OK', message: { userId, token, refreshToken } });
   } catch (e) {
     return res.status(500).json({ status: 'ERROR', message: e.message });
   }
