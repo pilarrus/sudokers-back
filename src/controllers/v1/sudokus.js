@@ -12,7 +12,7 @@ const createSudoku = async (req, res) => {
       user: userId,
     });
 
-    return res.json({ status: 'OK', data: sudoku });
+    return res.status(201).json({ status: 'OK', data: sudoku });
   } catch (e) {
     return res.status(500).json({ status: 'ERROR', message: e.message });
   }
