@@ -9,13 +9,13 @@ const createUser = async (req, res) => {
 
     const hash = await bcrypt.hash(password, 15);
 
-    await Users.create({
+    const user = await Users.create({
       username,
       password: hash,
       email,
     });
 
-    return res.json({ status: 'OK', message: 'user created' });
+    return res.status(201).json({ status: 'OK', message: user });
   } catch (e) {
     if (e.code && e.code === 11000) {
       return res
