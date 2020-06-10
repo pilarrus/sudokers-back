@@ -12,7 +12,7 @@ const sudokuSchema = new Schema({
     number: Number,
     grid: [Number]
   }],
-  difficulty: { type: String, enum: ['facil', 'medio', 'dificil', 'experto'], required: true },
+  difficulty: { type: String, enum: ['easy', 'medium', 'difficult', 'extreme'], required: true },
   seconds_accumulated: { type: Number, default: 0, required: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, {
