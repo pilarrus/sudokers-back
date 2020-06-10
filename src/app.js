@@ -1,13 +1,15 @@
 const express = require('express');
 const path = require('path');
-const logger = require('morgan');
+const cors = require('cors');
 
+const logger = require('morgan');
 const indexRouter = require('./routes/v1');
 const usersRouter = require('./routes/v1/users');
 const sudokusRouter = require('./routes/v1/sudokus');
 
 const app = express();
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
