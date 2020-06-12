@@ -11,6 +11,41 @@ const emailModel = {
   isEmail: true
 };
 
+const dateModel = {
+  in: ['body'],
+  isLength: {
+    errorMessage: 'No tiene la longitud esperada',
+    options: { min: 10, max: 10 }
+  },
+  custom: {
+    errorMessage: 'No tiene el formato esperado',
+    options: (value) => {
+      const strongRegex = new RegExp('^[0-9]{2,}/[0-9]{2,}/[0-9]{4,}$');
+      // const strongRegex = new RegExp('^(?=.*[0-9])(?=.{4,})');
+      return strongRegex.test(value);
+    }
+  }
+};
+
+const timerModel = {
+  in: ['body'],
+  isLength: {
+    errorMessage: 'No tiene la longitud esperada',
+    options: { min: 5, max: 5 }
+  },
+  custom: {
+    errorMessage: 'No tiene el formato esperado',
+    options: (value) => {
+      const strongRegex = new RegExp('^[0-9]{2,}:[0-9]{2,}');
+      return strongRegex.test(value);
+    }
+  }
+};
+
+const levelModel = {
+  in: ['body']
+};
+
 const difficultyModel = {
   in: ['body'],
   isString: true
@@ -19,7 +54,7 @@ const difficultyModel = {
 const passwordModel = {
   in: ['body'],
   isLength: {
-    errorMessage: 'La conidModeltraseña debe tener al menos 4 numeros',
+    errorMessage: 'La contraseña debe tener al menos 4 numeros',
     options: { min: 4 }
   },
   custom: {
@@ -128,6 +163,10 @@ const getSudokusByUser = {
   token: tokenModel
 };
 
+const initialiseRanking = {
+  userId: userIdModel
+};
+
 const login = {
   email: emailModel,
   password: passwordModel
@@ -142,6 +181,14 @@ const register = {
   username: usernameModel,
   password: passwordModel,
   email: emailModel
+};
+
+const updateRanking = {
+  userId: userIdModel,
+  user: userIdModel,
+  level: levelModel,
+  date: dateModel,
+  timer: timerModel
 };
 
 const updateSeconds = {
@@ -222,9 +269,11 @@ module.exports = {
   deleteUser,
   getSudoku,
   getSudokusByUser,
+  initialiseRanking,
   login,
   refreshLogin,
   register,
+  updateRanking,
   updateSeconds,
   updateSudoku,
   updateUser,
