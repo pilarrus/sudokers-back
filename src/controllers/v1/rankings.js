@@ -45,7 +45,7 @@ const compareNumbers = (x, y) => {
 };
 
 const compareTimer = (currentTimer, timer) => {
-  if (timer.includes('---')) return 1;
+  if (timer.includes('---')) return -1;
 
   const minutes = parseInt(timer.slice(0, 2), 10);
   const currentMinutes = parseInt(currentTimer.slice(0, 2), 10);
