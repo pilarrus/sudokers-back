@@ -11,9 +11,13 @@ const initialiseRanking = async (req, res) => {
       results.push(Rankings.create({ user: userId, level }));
     }
     const initialisedResults = await Promise.all(results);
-    return res.status(201).json({ status: 'OK', message: initialisedResults });
+    return res
+      .status(201)
+      .json({ status: 'OK', message: initialisedResults });
   } catch (e) {
-    return res.status(500).json({ status: 'ERROR', message: e.message });
+    return res
+      .status(500)
+      .json({ status: 'ERROR', message: 'Your request could not be processed, please try again later' });
   }
 };
 
@@ -24,9 +28,13 @@ const getResults = async (req, res) => {
     const results = await Rankings.find({
       user: userId,
     });
-    return res.status(200).json({ status: 'OK', message: results });
+    return res
+      .status(200)
+      .json({ status: 'OK', message: results });
   } catch (e) {
-    return res.status(500).json({ status: 'ERROR', message: e.message });
+    return res
+      .status(500)
+      .json({ status: 'ERROR', message: 'Your request could not be processed, please try again later' });
   }
 };
 
@@ -61,11 +69,17 @@ const updateRanking = async (req, res) => {
     if (response === -1) {
       await Rankings.findByIdAndDelete(resultFound._id);
       await Rankings.create(currentResult);
-      return res.status(200).json({ status: 'OK', message: 'current result saved' });
+      return res
+        .status(200)
+        .json({ status: 'OK', message: 'current result saved' });
     }
-    return res.status(200).json({ status: 'OK', message: 'unchanged' });
+    return res
+      .status(200)
+      .json({ status: 'OK', message: 'unchanged' });
   } catch (e) {
-    return res.status(500).json({ status: 'ERROR', message: e.message });
+    return res
+      .status(500)
+      .json({ status: 'ERROR', message: 'Your request could not be processed, please try again later' });
   }
 };
 

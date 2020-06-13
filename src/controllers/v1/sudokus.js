@@ -12,27 +12,39 @@ const createSudoku = async (req, res) => {
       user: userId,
     });
 
-    return res.status(201).json({ status: 'OK', data: sudoku });
+    return res
+      .status(201)
+      .json({ status: 'OK', data: sudoku });
   } catch (e) {
-    return res.status(500).json({ status: 'ERROR', message: e.message });
+    return res
+      .status(500)
+      .json({ status: 'ERROR', message: 'Your request could not be processed, please try again later' });
   }
 };
 
 const deleteSudoku = async (req, res) => {
   try {
     await Sudokus.findByIdAndDelete(req.params.sudokuId);
-    return res.json({ status: 'OK', message: 'sudoku deleted' });
+    return res
+      .status(200)
+      .json({ status: 'OK', message: 'sudoku deleted' });
   } catch (e) {
-    return res.status(500).json({ status: 'ERROR', message: e.message });
+    return res
+      .status(500)
+      .json({ status: 'ERROR', message: 'Your request could not be processed, please try again later' });
   }
 };
 
 const getSudoku = async (req, res) => {
   try {
     const sudoku = await Sudokus.findById(req.params.sudokuId);
-    return res.json({ status: 'OK', message: sudoku });
+    return res
+      .status(200)
+      .json({ status: 'OK', message: sudoku });
   } catch (e) {
-    return res.json({ status: 'ERROR', message: e.message });
+    return res
+      .status(500)
+      .json({ status: 'ERROR', message: 'Your request could not be processed, please try again later' });
   }
 };
 
@@ -41,45 +53,61 @@ const getSudokusByUser = async (req, res) => {
     const sudokus = await Sudokus.find({
       user: req.params.userId,
     });
-    return res.json({ status: 'OK', data: sudokus });
+    return res
+      .status(200)
+      .json({ status: 'OK', data: sudokus });
   } catch (e) {
-    return res.json({ status: 'ERROR', message: e.message });
+    return res
+      .status(500)
+      .json({ status: 'ERROR', message: 'Your request could not be processed, please try again later' });
   }
 };
 
 const updateSudoku = async (req, res) => {
   try {
     const { cells } = req.body;
+
     if (!cells) {
-      return res.status(400).json({
-        status: 'ERROR',
-        message: 'cells cannot be null',
-      });
+      return res
+        .status(400)
+        .json({ status: 'ERROR', message: 'cells cannot be null' });
     }
+
     await Sudokus.findByIdAndUpdate(req.params.sudokuId, {
       cells
     });
-    return res.json({ status: 'OK', message: 'sudoku updated' });
+
+    return res
+      .status(200)
+      .json({ status: 'OK', message: 'sudoku updated' });
   } catch (e) {
-    return res.status(500).json({ status: 'ERROR', message: 'sudoku not updated' });
+    return res
+      .status(500)
+      .json({ status: 'ERROR', message: 'sudoku not updated' });
   }
 };
 
 const updateSeconds = async (req, res) => {
   try {
     const { seconds_accumulated } = req.body;
+
     if (!seconds_accumulated) {
-      return res.status(400).json({
-        status: 'ERROR',
-        message: 'seconds_accumulated cannot be null',
-      });
+      return res
+        .status(400)
+        .json({ status: 'ERROR', message: 'seconds_accumulated cannot be null' });
     }
+
     await Sudokus.findByIdAndUpdate(req.params.sudokuId, {
       seconds_accumulated
     });
-    return res.json({ status: 'OK', message: 'seconds updated' });
+
+    return res
+      .status(200)
+      .json({ status: 'OK', message: 'seconds updated' });
   } catch (e) {
-    return res.status(500).json({ status: 'ERROR', message: 'seconds not updated' });
+    return res
+      .status(500)
+      .json({ status: 'ERROR', message: 'seconds not updated' });
   }
 };
 
