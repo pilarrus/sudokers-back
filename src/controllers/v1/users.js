@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const Users = require('../../mongo/models/users');
 const Sudokus = require('../../mongo/models/sudokus');
 const { generateKeyPairs } = require('../../utils/helpers-functions');
