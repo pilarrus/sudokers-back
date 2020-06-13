@@ -38,10 +38,6 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// const getUsers = (req, res) => {
-//   res.json({success: true, module: 'Users'});
-// };
-
 const isAvailable = async (req, res) => {
   try {
     let user;
@@ -120,7 +116,7 @@ const refreshLogin = async (req, res) => {
     }
 
     const { token, refreshToken } = await generateKeyPairs(user);
-    return res.json({ status: 'OK', data: { token, refreshToken } });
+    return res.json({ status: 'OK', data: { userId, token, refreshToken } });
   } catch (e) {
     return res.status(500).json({ status: 'ERROR', message: e.message });
   }
@@ -129,7 +125,6 @@ const refreshLogin = async (req, res) => {
 module.exports = {
   createUser,
   deleteUser,
-  // getUsers,
   isAvailable,
   login,
   updateUser,

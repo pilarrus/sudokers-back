@@ -6,7 +6,7 @@ const initialiseRanking = async (req, res) => {
     const { userId } = req.params;
 
     const results = [];
-    // eslint-disable-next-line no-restricted-syntax
+
     for (const level of levels) {
       results.push(Rankings.create({ user: userId, level }));
     }

@@ -27,16 +27,6 @@ const deleteSudoku = async (req, res) => {
   }
 };
 
-// const getSudokus = async (req, res) => {
-//   try {
-//     const sudokus = await Sudokus.find();
-//     res.send({status: 'OK', data: sudokus});
-//
-//   } catch (e) {
-//     res.send({status: 'ERROR', message: e.message});
-//   }
-// };
-
 const getSudoku = async (req, res) => {
   try {
     const sudoku = await Sudokus.findById(req.params.sudokuId);
@@ -97,7 +87,6 @@ module.exports = {
   createSudoku,
   deleteSudoku,
   getSudoku,
-  // getSudokus,
   getSudokusByUser,
   updateSudoku,
   updateSeconds

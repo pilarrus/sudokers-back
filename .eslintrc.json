@@ -21,6 +21,11 @@
       "no-plusplus": "off",
       "no-underscore-dangle": "off",
       "object-curly-newline":"off",
-      "spaced-comment": "off"
+      "spaced-comment": "off",
+      "no-restricted-syntax": "off",
+      "consistent-return": "off",
+      "no-throw-literal": "off",
+      "no-useless-catch": "off",
+      "no-param-reassign": "off"
     }
 }

@@ -21,7 +21,6 @@ const dateModel = {
     errorMessage: 'No tiene el formato esperado',
     options: (value) => {
       const strongRegex = new RegExp('^[0-9]{2,}/[0-9]{2,}/[0-9]{4,}$');
-      // const strongRegex = new RegExp('^(?=.*[0-9])(?=.{4,})');
       return strongRegex.test(value);
     }
   }
@@ -58,7 +57,6 @@ const passwordModel = {
     options: { min: 4 }
   },
   custom: {
-    // errorMessage: 'La contraseña debe ser más fuerte',
     options: (value) => {
       const strongRegex = new RegExp('^(?=.*[0-9])(?=.{4,})');
       return strongRegex.test(value);
@@ -70,7 +68,6 @@ const refreshModel = {
   in: ['body'],
   isString: true,
   isLength: {
-    // errorMessage: 'El refresh token debe tener 20 caracteres',
     options: [{ min: 20, max: 20 }]
   },
 };
@@ -251,7 +248,6 @@ const reqValidation = model => (
   async (req, res, next) => {
     try {
       const middlewares = checkSchema(model);
-      // console.log('middlewares: ', middlewares);
       await Promise.all(middlewares.map(middleware => middleware.run(req)));
 
       validationResult(req).throw();
