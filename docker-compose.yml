@@ -37,7 +37,8 @@ services:
       - 3000:3000
     environment:
       - NODE_ENV=development
-    command: /bin/sh -c "echo 'Data Container' && while true; do sleep infinity; done"
+    #command: /bin/sh -c "echo 'Data Container' && while true; do sleep infinity; done"
+    command: pm2-runtime bin/www
 
   mongo:
     image: mongo:4.2-bionic
