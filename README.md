@@ -22,4 +22,4 @@ docker-compose stop
 ```
 A parte, también es necesario que descargues sudokers-front en [https://github.com/pilarrus/sudokers-front](https://github.com/pilarrus/sudokers-front) y sigas las instrucciones de instalación.
 
-Una vez hayas descargado las dos partes de Sudokers y seguido las instrucciones. Abre un navegador con la dirección [http://localhost:3000](http://localhost:3000).
+Una vez hayas descargado las dos partes de Sudokers y seguido las instrucciones. Abre un navegador con la dirección [http://localhost:8080](http://localhost:8080).
